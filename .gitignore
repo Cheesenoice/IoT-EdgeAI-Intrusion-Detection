@@ -1,0 +1,72 @@
+﻿# ============================================================
+# Git Ignore - SENTINEL EYE Project
+# ============================================================
+
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+server/venv/
+server/.venv/
+
+# Environment Variables & Secrets (CRITICAL FOR SECURITY)
+.env
+*.env
+server/.env
+secrets.h
+HCI_Camera_Test/include/secrets.h
+
+# Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# PlatformIO & Embedded Builds
+.pio/
+HCI_Camera_Test/.pio/
+*.elf
+*.bin
+*.hex
+*.map
+
+# Editor & IDE Settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*.code-workspace
+HCI_Camera_Test/.vscode/
+
+# Model Weights & Checkpoints (>100MB exceeds GitHub limits)
+# Note: yolov8n.pt will be automatically downloaded by Ultralytics when run
+*.pt
+*.onnx
+*.engine
+*.tflite
+runs/
+
+# Intrusion Logs & User Captured Images (Privacy & Repo Size)
+server/intrusion_logs/*.jpg
+server/intrusion_logs/*.jpeg
+server/intrusion_logs/*.png
+server/intrusion_logs/intrusion_log.json
+!server/intrusion_logs/.gitkeep
+
+# Dataset Raw Captures & Cache
+fine_tuning/raw_images/
+fine_tuning/dataset/train/images/*.jpg
+fine_tuning/dataset/train/labels/*.txt
+fine_tuning/dataset/val/images/*.jpg
+fine_tuning/dataset/val/labels/*.txt
+!fine_tuning/dataset/train/images/.gitkeep
+!fine_tuning/dataset/train/labels/.gitkeep
+!fine_tuning/dataset/val/images/.gitkeep
+!fine_tuning/dataset/val/labels/.gitkeep
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini

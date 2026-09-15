@@ -1,0 +1,11 @@
+﻿# ============================================================
+# SENTINEL EYE - YOLOv8 Dataset Configuration
+# ============================================================
+
+path: ../dataset
+train: train/images
+val: val/images
+
+# Classes
+names:
+  0: owner
