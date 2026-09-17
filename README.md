@@ -58,12 +58,27 @@ Traditional video surveillance systems are fundamentally passive, relying on pos
 The distributed architecture decouples edge video acquisition and actuation from compute-intensive neural network inference across three dedicated tiers:
 
 ```mermaid
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'fontFamily': 'Segoe UI, Inter, -apple-system, sans-serif',
+    'fontSize': '13px',
+    'primaryColor': '#ffffff',
+    'primaryTextColor': '#0f172a',
+    'primaryBorderColor': '#3b82f6',
+    'lineColor': '#64748b',
+    'edgeLabelBackground': '#ffffff',
+    'clusterBkg': '#ffffff',
+    'clusterBorder': '#cbd5e1',
+    'mainBkg': '#ffffff'
+  }
+}}%%
 graph TB
     subgraph EdgeTier ["EDGE TIER: ESP32-CAM SENSOR NODE"]
         direction TB
         CamSensor["OmniVision OV2640 Image Sensor<br/>(VGA 640x480 @ 25-30 FPS)"]
-        DMA["DMA & PSRAM Frame Buffer<br/>(CAMERA_FB_IN_PSRAM)"]
-        Port80["HTTP Stream Server<br/>(Port 80: /stream & /capture)"]
+        DMA["DMA & PSRAM Double Buffer<br/>(CAMERA_FB_IN_PSRAM)"]
+        Port80["HTTP Video Stream Server<br/>(Port 80: /stream & /capture)"]
         Port81["Emergency Control Socket<br/>(Port 81: /buzzer/on & off)"]
         BuzzerHw["Active Piezo Buzzer<br/>(GPIO 14 Low-Latency Switch)"]
         
@@ -86,23 +101,23 @@ graph TB
     subgraph ClientTier ["CLIENT TIER: WEB TELEMETRY UI"]
         direction TB
         StreamView["MJPEG Canvas Feed Overlay<br/>(Real-Time Inference Output)"]
-        VectorEditor["Vector Virtual Fence Canvas<br/>(Normalized Relative [0.0 - 1.0])"]
+        VectorEditor["Vector Virtual Fence Canvas<br/>(Normalized Relative Coordinates)"]
         TelemetryStats["System Telemetry HUD<br/>(FPS, Latency, Target Counters)"]
         WebAudio["Web Audio API Synthesizer<br/>(Acoustic Siren Generator)"]
     end
 
     Port80 -- "MJPEG Byte Stream (IEEE 802.11 b/g/n)" --> IngestThread
-    AlertThread -- "Fast Emergency Socket Trigger" --> Port81
+    AlertThread -- "Fast Socket Trigger (Port 81)" --> Port81
     InferenceThread -- "Rendered MJPEG (/video_feed)" --> StreamView
     VectorEditor -- "POST /api/fence/set (JSON Polygon)" --> InferenceThread
     InferenceThread -- "GET /api/status (JSON Metrics)" --> TelemetryStats
     InferenceThread -. "Trigger Web Strobe & Siren" .-> WebAudio
     AlertThread -- "SMTP SSL :465 (5-Frame Burst Attachment)" --> MailGateway[("Google SMTP Gateway")]
 
-    classDef edge fill:#f0f9ff,stroke:#0284c7,stroke-width:2px,color:#0369a1;
-    classDef server fill:#f0fdf4,stroke:#059669,stroke-width:2px,color:#065f46;
-    classDef client fill:#faf5ff,stroke:#7c3aed,stroke-width:2px,color:#5b21b6;
-    classDef cloud fill:#fffbeb,stroke:#d97706,stroke-width:2px,color:#92400e;
+    classDef edge fill:#f0f9ff,stroke:#0284c7,stroke-width:1.5px,color:#0369a1;
+    classDef server fill:#f0fdf4,stroke:#059669,stroke-width:1.5px,color:#065f46;
+    classDef client fill:#faf5ff,stroke:#7c3aed,stroke-width:1.5px,color:#5b21b6;
+    classDef cloud fill:#fffbeb,stroke:#d97706,stroke-width:1.5px,color:#92400e;
 
     class CamSensor,DMA,Port80,Port81,BuzzerHw edge;
     class IngestThread,SharedFrame,InferenceThread,AlertThread server;
@@ -154,24 +169,39 @@ $$\left( v_i.y > y_p \right) \ne \left( v_j.y > y_p \right) \quad \land \quad x_
 $$\text{Intrusion State} = \begin{cases} \text{BREACH (True)}, & \text{if } I \equiv 1 \pmod 2 \\ \text{SECURE (False)}, & \text{if } I \equiv 0 \pmod 2 \end{cases}$$
 
 ```mermaid
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'fontFamily': 'Segoe UI, Inter, -apple-system, sans-serif',
+    'fontSize': '13px',
+    'primaryColor': '#ffffff',
+    'primaryTextColor': '#0f172a',
+    'primaryBorderColor': '#3b82f6',
+    'lineColor': '#64748b',
+    'edgeLabelBackground': '#ffffff',
+    'clusterBkg': '#ffffff',
+    'clusterBorder': '#cbd5e1',
+    'mainBkg': '#ffffff'
+  }
+}}%%
 flowchart LR
-    subgraph RayCasting ["RAY-CASTING POINT-IN-POLYGON (JORDAN CURVE)"]
+    subgraph RayCasting ["RAY-CASTING POINT-IN-POLYGON ALGORITHM"]
         direction LR
-        PAnchor["Anchor Foot-Point<br/>p = ((x1+x2)/2, y2)"]
+        PAnchor["Anchor Foot-Point<br/>p = ((x1 + x2)/2, y2)"]
         Ray["Cast Horizontal Ray<br/>R: (x >= x_p, y = y_p)"]
-        Count["Count Intersections (I)<br/>with Directed Edges (v_i, v_j)"]
+        Count["Count Intersections (I)<br/>with Polygon Edges (v_i, v_j)"]
         Parity{"Parity Check<br/>(I mod 2)"}
-        Inside["ODD (I % 2 == 1)<br/>POINT INSIDE FENCE (BREACH)"]
-        Outside["EVEN (I % 2 == 0)<br/>POINT OUTSIDE FENCE (SECURE)"]
+        Inside["ODD: I % 2 == 1<br/>Point INSIDE Fence<br/>(BREACH DETECTED)"]
+        Outside["EVEN: I % 2 == 0<br/>Point OUTSIDE Fence<br/>(PERIMETER SECURE)"]
 
         PAnchor --> Ray --> Count --> Parity
         Parity -- "Odd" --> Inside
         Parity -- "Even" --> Outside
     end
 
-    classDef anchor fill:#f0fdfa,stroke:#0d9488,stroke-width:2px,color:#134e4a;
-    classDef breach fill:#fef2f2,stroke:#dc2626,stroke-width:2px,color:#991b1b;
-    classDef secure fill:#f0fdf4,stroke:#16a34a,stroke-width:2px,color:#166534;
+    classDef anchor fill:#f0fdfa,stroke:#0d9488,stroke-width:1.5px,color:#134e4a;
+    classDef breach fill:#fef2f2,stroke:#ef4444,stroke-width:1.5px,color:#991b1b;
+    classDef secure fill:#f0fdf4,stroke:#10b981,stroke-width:1.5px,color:#166534;
 
     class PAnchor,Ray,Count,Parity anchor;
     class Inside breach;
@@ -202,6 +232,21 @@ With calibration at $D_{\text{calibrated}} = 2.0\text{ m}$ and measured pixel he
 To eradicate false alarms generated by domestic inhabitants, inference is structured in two sequential stages:
 
 ```mermaid
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'fontFamily': 'Segoe UI, Inter, -apple-system, sans-serif',
+    'fontSize': '13px',
+    'primaryColor': '#ffffff',
+    'primaryTextColor': '#0f172a',
+    'primaryBorderColor': '#3b82f6',
+    'lineColor': '#64748b',
+    'edgeLabelBackground': '#ffffff',
+    'clusterBkg': '#ffffff',
+    'clusterBorder': '#cbd5e1',
+    'mainBkg': '#ffffff'
+  }
+}}%%
 flowchart TD
     FrameInput(["Incoming Camera Video Frame"]) --> YOLODetect["Stage 1: YOLOv8n Base Model<br/>Filter Class 0 ('person')<br/>Threshold: tau_det >= 0.45"]
     
@@ -211,7 +256,7 @@ flowchart TD
     
     OwnerReID --> IsOwner{"Authorized Resident?<br/>Confidence >= 0.82"}
     IsOwner -- "Yes" --> FlagAuthorized["Tag Green BBox: 'Owner'<br/>Suppress All Alert Channels"]
-    IsOwner -- "No" --> CalcFoot["Extract Foot-Point Anchor<br/>p_anchor = ((x1+x2)/2, y2)"]
+    IsOwner -- "No" --> CalcFoot["Extract Foot-Point Anchor<br/>p_anchor = ((x1 + x2)/2, y2)"]
     
     CalcFoot --> CalcDist["Pinhole Distance Estimation<br/>D = (H_real * f_px) / h_px"]
     CalcDist --> RayCastCheck{"Point-in-Polygon Check<br/>(Ray-Casting Algorithm)"}
@@ -219,10 +264,10 @@ flowchart TD
     RayCastCheck -- "Outside" --> TrackTrajectory["Tag Blue BBox: 'Intruder'<br/>Status: Outside Perimeter"]
     RayCastCheck -- "Inside" --> TriggerAlert["Tag Red BBox: 'BREACH DETECTED'<br/>TRIGGER MULTI-TIER ESCALATION"]
 
-    classDef process fill:#f8fafc,stroke:#475569,stroke-width:2px,color:#0f172a;
-    classDef decision fill:#eef2ff,stroke:#4f46e5,stroke-width:2px,color:#312e81;
-    classDef safe fill:#f0fdf4,stroke:#16a34a,stroke-width:2px,color:#166534;
-    classDef breach fill:#fef2f2,stroke:#dc2626,stroke-width:2px,color:#991b1b;
+    classDef process fill:#f8fafc,stroke:#3b82f6,stroke-width:1.5px,color:#0f172a;
+    classDef decision fill:#eef2ff,stroke:#6366f1,stroke-width:1.5px,color:#312e81;
+    classDef safe fill:#f0fdf4,stroke:#10b981,stroke-width:1.5px,color:#065f46;
+    classDef breach fill:#fef2f2,stroke:#ef4444,stroke-width:1.5px,color:#991b1b;
 
     class YOLODetect,OwnerReID,CalcFoot,CalcDist,IdleState,TrackTrajectory process;
     class HasPerson,IsOwner,RayCastCheck decision;
@@ -293,6 +338,21 @@ SENTINEL EYE implements an **asymmetric dual-port architecture** in firmware:
 The backend server is implemented in Python utilizing Flask and OpenCV, structured around thread-safe producer-consumer decouplers:
 
 ```mermaid
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'fontFamily': 'Segoe UI, Inter, -apple-system, sans-serif',
+    'fontSize': '13px',
+    'primaryColor': '#ffffff',
+    'primaryTextColor': '#0f172a',
+    'primaryBorderColor': '#3b82f6',
+    'lineColor': '#64748b',
+    'edgeLabelBackground': '#ffffff',
+    'clusterBkg': '#ffffff',
+    'clusterBorder': '#cbd5e1',
+    'mainBkg': '#ffffff'
+  }
+}}%%
 flowchart LR
     subgraph Ingestion ["THREAD 1: STREAM INGESTION"]
         direction TB
@@ -327,10 +387,10 @@ flowchart LR
     C4 --> B2
     C3 -- "Perimeter Breach" --> D1
 
-    classDef ingest fill:#f0f9ff,stroke:#0284c7,stroke-width:2px,color:#0369a1;
-    classDef mem fill:#faf5ff,stroke:#7c3aed,stroke-width:2px,color:#5b21b6;
-    classDef infer fill:#f0fdf4,stroke:#059669,stroke-width:2px,color:#065f46;
-    classDef alert fill:#fef2f2,stroke:#dc2626,stroke-width:2px,color:#991b1b;
+    classDef ingest fill:#f0f9ff,stroke:#0284c7,stroke-width:1.5px,color:#0369a1;
+    classDef mem fill:#faf5ff,stroke:#7c3aed,stroke-width:1.5px,color:#5b21b6;
+    classDef infer fill:#f0fdf4,stroke:#059669,stroke-width:1.5px,color:#065f46;
+    classDef alert fill:#fef2f2,stroke:#ef4444,stroke-width:1.5px,color:#991b1b;
 
     class A1,A2,A3 ingest;
     class B1,B2,B3 mem;
@@ -345,11 +405,28 @@ flowchart LR
 To mitigate alert fatigue and network saturation, the alert dispatcher is governed by a finite-state machine with hysteresis cooldown:
 
 ```mermaid
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'fontFamily': 'Segoe UI, Inter, -apple-system, sans-serif',
+    'fontSize': '13px',
+    'primaryColor': '#ffffff',
+    'primaryTextColor': '#0f172a',
+    'primaryBorderColor': '#3b82f6',
+    'lineColor': '#475569',
+    'stateLabelColor': '#0f172a',
+    'stateBkg': '#ffffff',
+    'stateBorder': '#3b82f6',
+    'compositeStateBkg': '#f8fafc',
+    'compositeStateBorder': '#94a3b8',
+    'altBackground': '#f1f5f9'
+  }
+}}%%
 stateDiagram-v2
     [*] --> Standby: Server Initialization & Thread Launch
     
     Standby --> TargetTracked: Person Detected in Camera FOV
-    TargetTracked --> Standby: Target Exits FOV
+    TargetTracked --> Standby: Target Exits Camera FOV
     
     TargetTracked --> PerimeterBreach: Foot-Point Enters Virtual Fence Polygon
     
@@ -379,6 +456,28 @@ stateDiagram-v2
 When an unauthorized breach occurs, the system initiates an asynchronous **Burst-Capture Sequence** across all integrated components:
 
 ```mermaid
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'fontFamily': 'Segoe UI, Inter, -apple-system, sans-serif',
+    'fontSize': '13px',
+    'actorBkg': '#f0f9ff',
+    'actorBorder': '#0284c7',
+    'actorTextColor': '#0f172a',
+    'actorLineColor': '#94a3b8',
+    'signalColor': '#2563eb',
+    'signalTextColor': '#0f172a',
+    'labelBoxBkgColor': '#f8fafc',
+    'labelBoxBorderColor': '#cbd5e1',
+    'labelTextColor': '#0f172a',
+    'loopTextColor': '#0f172a',
+    'noteBkgColor': '#fffbeb',
+    'noteBorderColor': '#f59e0b',
+    'noteTextColor': '#78350f',
+    'activationBkgColor': '#e2e8f0',
+    'activationBorderColor': '#64748b'
+  }
+}}%%
 sequenceDiagram
     autonumber
     actor Intruder as Unauthorized Person
@@ -453,6 +552,42 @@ model.train(
     lr0=0.001,
     project="sentinel_eye_finetune"
 )
+```
+
+```mermaid
+%%{init: {
+  'theme': 'base',
+  'themeVariables': {
+    'fontFamily': 'Segoe UI, Inter, -apple-system, sans-serif',
+    'fontSize': '13px',
+    'primaryColor': '#ffffff',
+    'primaryTextColor': '#0f172a',
+    'primaryBorderColor': '#3b82f6',
+    'lineColor': '#64748b',
+    'edgeLabelBackground': '#ffffff',
+    'clusterBkg': '#ffffff',
+    'clusterBorder': '#cbd5e1',
+    'mainBkg': '#ffffff'
+  }
+}}%%
+flowchart TD
+    A["Raw Image Collection<br/>(collect_images.py on ESP32-CAM)"] --> B["Data Annotation on Roboflow<br/>(Label: 'owner', YOLOv8 Format)"]
+    B --> C["Dataset Partitioning<br/>80% Train / 20% Validation"]
+    C --> D["Base Model Selection<br/>yolov8n.pt (COCO Weights)"]
+    D --> E["Layer Freezing<br/>Freeze first 10 Backbone layers"]
+    E --> F["Transfer Learning (train.py)<br/>50 Epochs, imgsz=640, AdamW"]
+    F --> G["Quantitative Evaluation (evaluate.py)<br/>mAP@0.50, Precision, Recall"]
+    G --> H{"Target Reached?<br/>mAP@0.50 >= 0.90"}
+    H -- "No" --> A
+    H -- "Yes" --> I["Export Model Weights<br/>sentinel_eye.pt -> server/"]
+
+    classDef step fill:#f8fafc,stroke:#3b82f6,stroke-width:1.5px,color:#0f172a;
+    classDef check fill:#eef2ff,stroke:#6366f1,stroke-width:1.5px,color:#312e81;
+    classDef success fill:#f0fdf4,stroke:#10b981,stroke-width:1.5px,color:#065f46;
+
+    class A,B,C,D,E,F,G step;
+    class H check;
+    class I success;
 ```
 
 ---
