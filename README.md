@@ -13,6 +13,7 @@
 
 ## 📑 Table of Contents
 - [1. Executive Abstract](#1-executive-abstract)
+- [📸 System Demonstration & Highlights](#-system-demonstration--highlights)
 - [2. System Architecture & Topology](#2-system-architecture--topology)
 - [3. Key Architectural Features](#3-key-architectural-features)
 - [4. Mathematical & Algorithmic Foundations](#4-mathematical--algorithmic-foundations)
@@ -50,6 +51,22 @@
 Traditional video surveillance systems are fundamentally passive, relying on post-incident forensic investigation or primitive pixel-difference/PIR motion triggers that suffer from prohibitively high false alarm rates caused by weather dynamics, non-human entities, and illumination shifts.
 
 **SENTINEL EYE** is an end-to-end cyber-physical security framework integrating cost-effective embedded edge hardware (**AI-Thinker ESP32-CAM**) with a high-throughput **Flask / PyTorch backend**. The system ingests a live wireless MJPEG video stream, conducts asynchronous **dual-model deep learning inference (YOLOv8)** to detect humans and differentiate authorized homeowners from intruders, evaluates geometric intrusion boundaries via a computational **Ray-Casting Point-in-Polygon (PiP)** algorithm, estimates real-world distance through monocular pinhole optics, and triggers an automated, multi-tiered escalation protocol (hardware buzzer, web audio-visual telemetry, and multi-frame burst email transmission).
+
+---
+
+## 📸 System Demonstration & Highlights
+
+Below are real-world photographic captures and evidentiary telemetry recorded during active operational testing of the **SENTINEL EYE** framework:
+
+| 🎥 Real-World Edge Deployment | 🚨 Real-Time Virtual Fence Breach Detection |
+|:---:|:---:|
+| <img src="docs/images/demo_system_deployment.jpg" width="100%" alt="System Deployment" /> | <img src="docs/images/demo_virtual_fence_intrusion.jpg" width="100%" alt="Virtual Fence Intrusion Detection" /> |
+| *AI-Thinker ESP32-CAM sensor node positioned in physical surveillance testing zone.* | *Real-time intrusion discrimination inside a 6-vertex polygonal virtual fence (Red BBox: INTRUDER).* |
+
+| 👤 Dual-Model Homeowner Re-Identification | 📧 Multi-Frame Forensic Email Alert |
+|:---:|:---:|
+| <img src="docs/images/demo_owner_recognition.jpg" width="100%" alt="Owner Recognition" /> | <img src="docs/images/forensic_email_evidence.jpg" width="100%" alt="Forensic Email Evidence" /> |
+| *Stage 2 fine-tuned YOLOv8 model recognizing authorized homeowner ($\tau \ge 0.82$) to suppress domestic false alarms.* | *Automated SSL SMTP alert dispatched within 2.8s of perimeter breach, carrying 5 evidentiary burst snapshots.* |
 
 ---
 
@@ -204,9 +221,12 @@ flowchart LR
     classDef secure fill:#f0fdf4,stroke:#10b981,stroke-width:1.5px,color:#166534;
 
     class PAnchor,Ray,Count,Parity anchor;
-    class Inside breach;
-    class Outside secure;
 ```
+
+<div align="center">
+  <img src="docs/images/demo_polygon_fencing_canvas.jpg" width="85%" alt="Virtual Fence Configuration Canvas" />
+  <p><em>Figure: Operator-defined 6-vertex polygonal virtual fence plotted directly on the live vector canvas overlay with normalized relative coordinates.</em></p>
+</div>
 
 ---
 
@@ -272,8 +292,12 @@ flowchart TD
     class YOLODetect,OwnerReID,CalcFoot,CalcDist,IdleState,TrackTrajectory process;
     class HasPerson,IsOwner,RayCastCheck decision;
     class FlagAuthorized safe;
-    class TriggerAlert breach;
 ```
+
+<div align="center">
+  <img src="docs/images/demo_owner_recognition.jpg" width="85%" alt="Dual-Model Homeowner Re-Identification Output" />
+  <p><em>Figure: Real-time dual-model discrimination — Stage 1 detects person geometry while Stage 2 classifies authorized resident to maintain a zero domestic false-alarm rate.</em></p>
+</div>
 
 ---
 
@@ -328,6 +352,11 @@ SENTINEL EYE implements an **asymmetric dual-port architecture** in firmware:
 
 > [!IMPORTANT]
 > **Brownout Prevention**: ESP32-CAM modules draw up to 310 mA during Wi-Fi transmission bursts. Powering via a USB-TTL 3.3V pin causes voltage sag and brownout boot loops. Power the module using an independent, regulated **5V 2A DC supply** with decoupling capacitors (10 μF + 100 nF) placed across 5V and GND.
+
+<div align="center">
+  <img src="docs/images/hardware_esp32_circuit.jpg" width="75%" alt="Physical ESP32-CAM Hardware Circuit" />
+  <p><em>Figure: Physical edge sensor assembly with AI-Thinker ESP32-CAM, FT232RL USB-UART programmer, and GPIO 14 active piezoelectric buzzer circuit.</em></p>
+</div>
 
 ---
 
@@ -397,6 +426,11 @@ flowchart LR
     class C1,C2,C3,C4 infer;
     class D1,D2,D3,D4 alert;
 ```
+
+<div align="center">
+  <img src="docs/images/server_terminal_startup.png" width="85%" alt="Multi-Threaded Flask Server Startup Log" />
+  <p><em>Figure: Multi-threaded Flask backend startup logs, thread initialization (Stream Ingestion, Inference Core, Alert Dispatcher), and tensor execution verification.</em></p>
+</div>
 
 ---
 
@@ -511,6 +545,11 @@ sequenceDiagram
     Server->>ESP: GET http://[ESP32_IP]:81/buzzer/off (After 3s Timeout)
     ESP-->>ESP: Drives GPIO 14 LOW (Buzzer Silenced)
 ```
+
+<div align="center">
+  <img src="docs/images/forensic_email_evidence.jpg" width="85%" alt="Forensic Email Alert with 5 Burst Photos" />
+  <p><em>Figure: Automated forensic evidence email delivered via authenticated SSL SMTP, displaying incident timestamps and 5 consecutive burst-capture photographic attachments.</em></p>
+</div>
 
 ---
 
@@ -638,6 +677,11 @@ The client interface provides full interactive control over system telemetry:
 - **Interactive Vector Canvas**: Real-time normalized relative coordinates ($x/W, y/H$) ensure polygon coordinates scale dynamically to any display resolution.
 - **Synthesized Audio Beacon**: Uses the Web Audio API (`OscillatorNode`) to produce a rhythmic alerting tone directly in the client browser during an active intrusion.
 
+<div align="center">
+  <img src="docs/images/ui_incident_history_widget.jpg" width="85%" alt="Incident History and Evidentiary Snapshot Widget" />
+  <p><em>Figure: Web Telemetry Dashboard incident history widget with persistent breach timestamps, target detection counts, and evidentiary snapshot retrieval.</em></p>
+</div>
+
 ---
 
 ## 9. Repository Structure
@@ -648,13 +692,17 @@ HCL/
 ├── LICENSE                         # Open-source MIT License
 ├── README.md                       # Master technical documentation (with Light-Theme Mermaid charts)
 ├── requirements.txt                # Unified root Python dependency manifest
-├── docs/                           # Academic papers, technical reports, and schematics
-│   ├── BÁO_CÁO_DỰ_ÁN.md            # Detailed formal project report (Markdown)
-│   ├── BAO_CAO_DU_AN.pdf           # Formatted PDF publication report
-│   ├── HƯỚNG_DẪN_SỬ_DỤNG.md        # Comprehensive operations manual
+├── docs/                           # Academic papers, technical reports, diagrams, and assets
+│   ├── PROJECT_REPORT.md           # Master English Technical Report (14 Chapters)
+│   ├── PROJECT_REPORT.pdf          # Publication-Ready English PDF Report (18 Pages, Bookmarks & Links)
+│   ├── generate_report_pdf_en.py   # Standalone Python PDF Generator (English Edition)
+│   ├── BÁO_CÁO_DỰ_ÁN.md            # Detailed formal project report (Vietnamese Markdown)
+│   ├── BAO_CAO_DU_AN.pdf           # Formatted PDF publication report (Vietnamese)
+│   ├── HƯỚNG_DẪN_SỬ_DỤNG.md        # Comprehensive operations manual (Vietnamese)
 │   ├── HCI_Design_Specification_Template.docx # Human-Computer Interaction specs
 │   ├── plant1.pdf                  # Facility floor plan & camera placement diagram
-│   └── generate_report_pdf.py      # Automated Python PDF generation engine
+│   ├── diagrams/                   # 7 High-resolution light-theme architecture diagrams
+│   └── images/                     # Real-world demonstration photos, hardware circuits & PTIT logo
 ├── fine_tuning/                    # Owner Re-Identification machine learning module
 │   ├── collect_images.py           # Automated edge frame acquisition utility
 │   ├── train.py                    # YOLOv8 fine-tuning and layer-freezing script
@@ -815,9 +863,12 @@ Benchmarking conducted on an **AMD Ryzen 7 5800H @ 3.2GHz (CPU-only)** and **NVI
 ## 14. Academic Deliverables & Documentation
 
 This repository contains full technical specifications, academic documentation, and architectural designs:
-- 📑 **Formal Project Report (Markdown)**: [docs/BÁO_CÁO_DỰ_ÁN.md](docs/BÁO_CÁO_DỰ_ÁN.md)
-- 📄 **Publication-Ready PDF Report**: [docs/BAO_CAO_DU_AN.pdf](docs/BAO_CAO_DU_AN.pdf)
-- 📖 **Complete Operations & Maintenance Manual**: [docs/HƯỚNG_DẪN_SỬ_DỤNG.md](docs/HƯỚNG_DẪN_SỬ_DỤNG.md)
+- 🇬🇧 📑 **English Technical Project Report (Markdown)**: [docs/PROJECT_REPORT.md](docs/PROJECT_REPORT.md)
+- 🇬🇧 📄 **Publication-Ready English PDF Report (18 Pages, Bookmarks)**: [docs/PROJECT_REPORT.pdf](docs/PROJECT_REPORT.pdf)
+- 🇬🇧 🐍 **Automated English PDF Generator**: [docs/generate_report_pdf_en.py](docs/generate_report_pdf_en.py)
+- 🇻🇳 📑 **Formal Project Report (Vietnamese Markdown)**: [docs/BÁO_CÁO_DỰ_ÁN.md](docs/BÁO_CÁO_DỰ_ÁN.md)
+- 🇻🇳 📄 **Publication-Ready PDF Report (Vietnamese)**: [docs/BAO_CAO_DU_AN.pdf](docs/BAO_CAO_DU_AN.pdf)
+- 🇻🇳 📖 **Complete Operations & Maintenance Manual**: [docs/HƯỚNG_DẪN_SỬ_DỤNG.md](docs/HƯỚNG_DẪN_SỬ_DỤNG.md)
 - 🧠 **YOLOv8 Fine-Tuning Tutorial**: [fine_tuning/HUONG_DAN_FINE_TUNING.md](fine_tuning/HUONG_DAN_FINE_TUNING.md)
 - 📐 **Facility Architectural Layout & Placement**: [docs/plant1.pdf](docs/plant1.pdf)
 - 📝 **HCI Design Specification Document**: [docs/HCI_Design_Specification_Template.docx](docs/HCI_Design_Specification_Template.docx)
