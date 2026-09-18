@@ -1,4 +1,4 @@
-# 🛡️ SENTINEL EYE — Edge-to-Server Smart Surveillance System
+# SENTINEL EYE — Edge-to-Server Smart Surveillance System
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Flask 3.1](https://img.shields.io/badge/Flask-3.1.0-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
@@ -9,19 +9,19 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen?style=for-the-badge)](LICENSE)
 
 > [!IMPORTANT]
-> ### 📑 Official Academic Project Report & Video Demonstration
+> ### Official Academic Project Report & Video Demonstration
 > **Posts and Telecommunications Institute of Technology (PTIT) — Faculty of Information Technology**  
 > Course: **Human-Computer Interaction (HCI)** | Academic Year: **2026** | Author: **Huynh Huu Tri**  
 > 
-> 🎥 **[👉 Watch System Video Demonstration on YouTube (https://youtu.be/n2op9aZQfCc) 👈](https://youtu.be/n2op9aZQfCc)**  
-> 📥 **[👉 View & Download Full PDF Report on Google Drive 👈](https://drive.google.com/file/d/1O0312Y3JlM2RKBX1bc4fR-lGt-6NuERv/view?usp=sharing)**  
-> 📄 **Local Repository Files**: [`docs/PROJECT_REPORT.pdf`](docs/PROJECT_REPORT.pdf) (18-page publication PDF with Bookmarks) · [`docs/PROJECT_REPORT.md`](docs/PROJECT_REPORT.md)
+> - **Video Demonstration**: [Watch System Operational Demonstration on YouTube (https://youtu.be/n2op9aZQfCc)](https://youtu.be/n2op9aZQfCc)  
+> - **Official Project Report (PDF)**: [View & Download Full PDF Report on Google Drive](https://drive.google.com/file/d/1O0312Y3JlM2RKBX1bc4fR-lGt-6NuERv/view?usp=sharing)  
+> - **Local Repository Files**: [`docs/PROJECT_REPORT.pdf`](docs/PROJECT_REPORT.pdf) (18-page publication PDF with Bookmarks) · [`docs/PROJECT_REPORT.md`](docs/PROJECT_REPORT.md)
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 - [1. Project Overview](#1-project-overview)
-- [📸 Live Demonstration Highlights](#-live-demonstration-highlights)
+- [System Demonstration](#system-demonstration)
 - [2. System Architecture](#2-system-architecture)
 - [3. Key System Capabilities](#3-key-system-capabilities)
 - [4. Algorithms & Mathematical Formulations](#4-algorithms--mathematical-formulations)
@@ -69,30 +69,30 @@ SENTINEL EYE addresses this problem through a practical edge-to-server architect
 
 ---
 
-## 📸 Live Demonstration Highlights
+## System Demonstration
 
-### 🎥 End-to-End System Video Demonstration
+### Video Demonstration
 
 <div align="center">
   <a href="https://youtu.be/n2op9aZQfCc" target="_blank">
     <img src="https://img.youtube.com/vi/n2op9aZQfCc/maxresdefault.jpg" width="90%" alt="SENTINEL EYE System Operational Demonstration Video" style="border-radius: 8px; border: 1px solid #cbd5e1;" />
   </a>
   <p>
-    <strong><a href="https://youtu.be/n2op9aZQfCc" target="_blank">▶️ Click here to watch the full operational video demo on YouTube (https://youtu.be/n2op9aZQfCc)</a></strong><br>
+    <strong><a href="https://youtu.be/n2op9aZQfCc" target="_blank">Watch the full operational video demo on YouTube (https://youtu.be/n2op9aZQfCc)</a></strong><br>
     <em>Full end-to-end demonstration: ESP32-CAM video streaming, interactive polygon fencing, dual-model YOLOv8 human detection & homeowner re-identification, physical buzzer actuation, and automated forensic email alerts.</em>
   </p>
 </div>
 
-### 📷 Real-World System Captures & Evidence
+### Photographic Captures & Evidence
 
 Below are real-world photographic captures and telemetry screenshots recorded during operational testing of the **SENTINEL EYE** system:
 
-| 🎥 Real-World Edge Deployment | 🚨 Real-Time Virtual Fence Breach Detection |
+| Real-World Edge Deployment | Real-Time Virtual Fence Breach Detection |
 |:---:|:---:|
 | <img src="docs/images/demo_system_deployment.jpg" width="100%" alt="System Deployment" /> | <img src="docs/images/demo_virtual_fence_intrusion.jpg" width="100%" alt="Virtual Fence Intrusion Detection" /> |
 | *AI-Thinker ESP32-CAM sensor node positioned in domestic testing zone.* | *Real-time intrusion discrimination inside 6-vertex polygon (Red BBox: INTRUDER).* |
 
-| 👤 Dual-Model Homeowner Re-Identification | 📧 Multi-Frame Forensic Email Alert |
+| Dual-Model Homeowner Re-Identification | Multi-Frame Forensic Email Alert |
 |:---:|:---:|
 | <img src="docs/images/demo_owner_recognition.jpg" width="100%" alt="Owner Recognition" /> | <img src="docs/images/forensic_email_evidence.jpg" width="100%" alt="Forensic Email Evidence" /> |
 | *Stage 2 fine-tuned model identifying authorized resident (Green BBox), suppressing false alarms.* | *Automated SSL SMTP email alert delivered with 5 burst-capture snapshot attachments.* |
@@ -433,13 +433,13 @@ The browser-based dashboard provides complete real-time monitoring and control:
 │  │     ┌─────────┐                         │  │ Detect Interval:    Every 2 frames   │
 │  │     │  O   /  │                         │  ├──────────────────────────────────────┤
 │  │     │ /|\ /   │                         │  │ [ VIRTUAL FENCE CONTROLS ]           │
-│  │     │ / \/    │   <-- Polygon Boundary  │  │  [✎ Draw Fence]     [✖ Clear Fence] │
-│  │     └────●────┘                         │  │  [✔ Save Polygon]   [⛶ Fullscreen]   │
+│  │     │ / \/    │   <-- Polygon Boundary  │  │  [Draw Fence]      [Clear Fence]     │
+│  │     └────●────┘                         │  │  [Save Polygon]    [Fullscreen]      │
 │  │          ▲ Foot-Point (INSIDE FENCE)    │  ├──────────────────────────────────────┤
 │  │                                         │  │ [ ESCALATION CONTROLS ]              │
-│  │                                         │  │  [🚨 Buzzer ON]     [🔇 Buzzer OFF]  │
-│  │                                         │  │  [📧 Auto Alert: ENABLED]           │
-│  └─────────────────────────────────────────┘  │  [📷 Take Snapshot] [🔔 Test Alert]  │
+│  │                                         │  │  [Buzzer ON]       [Buzzer OFF]      │
+│  │                                         │  │  [Auto Alert: ENABLED]               │
+│  └─────────────────────────────────────────┘  │  [Take Snapshot]   [Test Alert]      │
 ├───────────────────────────────────────────────┴──────────────────────────────────────┤
 │  INTRUSION HISTORY (Latest Events with Evidentiary Snapshots)                         │
 │  [2026-03-10 14:30:25] Intrusion detected (Count: 1) -> Evidence: snapshot_001.jpg   │
@@ -625,15 +625,15 @@ Realistic operational performance measured under typical testing conditions (ESP
 
 ## 14. Academic Deliverables & Documentation
 
-- 🎥 **System Video Demonstration (YouTube)**: [**Watch Operational Demo on YouTube**](https://youtu.be/n2op9aZQfCc)
-- 📥 **Official Academic Report (PDF - Google Drive)**: [**Download / View on Google Drive**](https://drive.google.com/file/d/1O0312Y3JlM2RKBX1bc4fR-lGt-6NuERv/view?usp=sharing)
-- 🇬🇧 📄 **English PDF Report (Local 18-Page Edition)**: [`docs/PROJECT_REPORT.pdf`](docs/PROJECT_REPORT.pdf)
-- 🇬🇧 📑 **English Technical Report (Markdown)**: [`docs/PROJECT_REPORT.md`](docs/PROJECT_REPORT.md)
-- 🇬🇧 🐍 **Automated Python PDF Generator**: [`docs/generate_report_pdf_en.py`](docs/generate_report_pdf_en.py)
-- 🇻🇳 📑 **Vietnamese Formal Report (Markdown)**: [`docs/BÁO_CÁO_DỰ_ÁN.md`](docs/BÁO_CÁO_DỰ_ÁN.md)
-- 🇻🇳 📄 **Vietnamese PDF Report**: [`docs/BAO_CAO_DU_AN.pdf`](docs/BAO_CAO_DU_AN.pdf)
-- 🇻🇳 📖 **Operations Manual (Vietnamese)**: [`docs/HƯỚNG_DẪN_SỬ_DỤNG.md`](docs/HƯỚNG_DẪN_SỬ_DỤNG.md)
-- 🧠 **YOLOv8 Fine-Tuning Guide**: [`fine_tuning/HUONG_DAN_FINE_TUNING.md`](fine_tuning/HUONG_DAN_FINE_TUNING.md)
+- **System Video Demonstration (YouTube)**: [**Watch Operational Demo on YouTube**](https://youtu.be/n2op9aZQfCc)
+- **Official Academic Report (PDF - Google Drive)**: [**Download / View on Google Drive**](https://drive.google.com/file/d/1O0312Y3JlM2RKBX1bc4fR-lGt-6NuERv/view?usp=sharing)
+- **English PDF Report (Local 18-Page Edition)**: [`docs/PROJECT_REPORT.pdf`](docs/PROJECT_REPORT.pdf)
+- **English Technical Report (Markdown)**: [`docs/PROJECT_REPORT.md`](docs/PROJECT_REPORT.md)
+- **Automated Python PDF Generator**: [`docs/generate_report_pdf_en.py`](docs/generate_report_pdf_en.py)
+- **Vietnamese Formal Report (Markdown)**: [`docs/BÁO_CÁO_DỰ_ÁN.md`](docs/BÁO_CÁO_DỰ_ÁN.md)
+- **Vietnamese PDF Report**: [`docs/BAO_CAO_DU_AN.pdf`](docs/BAO_CAO_DU_AN.pdf)
+- **Operations Manual (Vietnamese)**: [`docs/HƯỚNG_DẪN_SỬ_DỤNG.md`](docs/HƯỚNG_DẪN_SỬ_DỤNG.md)
+- **YOLOv8 Fine-Tuning Guide**: [`fine_tuning/HUONG_DAN_FINE_TUNING.md`](fine_tuning/HUONG_DAN_FINE_TUNING.md)
 
 ---
 

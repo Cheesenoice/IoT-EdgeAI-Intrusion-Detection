@@ -1,4 +1,4 @@
-# 🛡️ SENTINEL EYE — Technical Project Report
+# SENTINEL EYE — Technical Project Report
 ## Intelligent Edge-to-Server Surveillance Framework with AI Virtual Fence & Dual-Model YOLOv8
 
 <p align="center">
@@ -16,7 +16,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 1. [Executive Summary & Problem Statement](#1-executive-summary--problem-statement)
 2. [System Architecture & Distributed Topology](#2-system-architecture--distributed-topology)
 3. [Edge Hardware Engineering & Embedded Firmware](#3-edge-hardware-engineering--embedded-firmware)
