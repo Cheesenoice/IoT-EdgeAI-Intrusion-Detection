@@ -5,13 +5,15 @@
 [![YOLOv8](https://img.shields.io/badge/YOLOv8-Ultralytics-00FFFF?style=for-the-badge&logo=ultralytics&logoColor=black)](https://docs.ultralytics.com/)
 [![PlatformIO](https://img.shields.io/badge/PlatformIO-ESP32--CAM-FF8700?style=for-the-badge&logo=platformio&logoColor=white)](https://platformio.org/)
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.10-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)](https://opencv.org/)
+[![YouTube Demo](https://img.shields.io/badge/YouTube-Video%20Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/n2op9aZQfCc)
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen?style=for-the-badge)](LICENSE)
 
 > [!IMPORTANT]
-> ### 📑 Official Academic Project Report (PDF)
+> ### 📑 Official Academic Project Report & Video Demonstration
 > **Posts and Telecommunications Institute of Technology (PTIT) — Faculty of Information Technology**  
 > Course: **Human-Computer Interaction (HCI)** | Academic Year: **2026** | Author: **Huynh Huu Tri**  
 > 
+> 🎥 **[👉 Watch System Video Demonstration on YouTube (https://youtu.be/n2op9aZQfCc) 👈](https://youtu.be/n2op9aZQfCc)**  
 > 📥 **[👉 View & Download Full PDF Report on Google Drive 👈](https://drive.google.com/file/d/1O0312Y3JlM2RKBX1bc4fR-lGt-6NuERv/view?usp=sharing)**  
 > 📄 **Local Repository Files**: [`docs/PROJECT_REPORT.pdf`](docs/PROJECT_REPORT.pdf) (18-page publication PDF with Bookmarks) · [`docs/PROJECT_REPORT.md`](docs/PROJECT_REPORT.md)
 
@@ -68,6 +70,20 @@ SENTINEL EYE addresses this problem through a practical edge-to-server architect
 ---
 
 ## 📸 Live Demonstration Highlights
+
+### 🎥 End-to-End System Video Demonstration
+
+<div align="center">
+  <a href="https://youtu.be/n2op9aZQfCc" target="_blank">
+    <img src="https://img.youtube.com/vi/n2op9aZQfCc/maxresdefault.jpg" width="90%" alt="SENTINEL EYE System Operational Demonstration Video" style="border-radius: 8px; border: 1px solid #cbd5e1;" />
+  </a>
+  <p>
+    <strong><a href="https://youtu.be/n2op9aZQfCc" target="_blank">▶️ Click here to watch the full operational video demo on YouTube (https://youtu.be/n2op9aZQfCc)</a></strong><br>
+    <em>Full end-to-end demonstration: ESP32-CAM video streaming, interactive polygon fencing, dual-model YOLOv8 human detection & homeowner re-identification, physical buzzer actuation, and automated forensic email alerts.</em>
+  </p>
+</div>
+
+### 📷 Real-World System Captures & Evidence
 
 Below are real-world photographic captures and telemetry screenshots recorded during operational testing of the **SENTINEL EYE** system:
 
@@ -609,8 +625,7 @@ Realistic operational performance measured under typical testing conditions (ESP
 
 ## 14. Academic Deliverables & Documentation
 
-This repository contains complete technical documentation and academic reports:
-
+- 🎥 **System Video Demonstration (YouTube)**: [**Watch Operational Demo on YouTube**](https://youtu.be/n2op9aZQfCc)
 - 📥 **Official Academic Report (PDF - Google Drive)**: [**Download / View on Google Drive**](https://drive.google.com/file/d/1O0312Y3JlM2RKBX1bc4fR-lGt-6NuERv/view?usp=sharing)
 - 🇬🇧 📄 **English PDF Report (Local 18-Page Edition)**: [`docs/PROJECT_REPORT.pdf`](docs/PROJECT_REPORT.pdf)
 - 🇬🇧 📑 **English Technical Report (Markdown)**: [`docs/PROJECT_REPORT.md`](docs/PROJECT_REPORT.md)

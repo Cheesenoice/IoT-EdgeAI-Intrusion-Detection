@@ -11,6 +11,8 @@
 > **Author & Lead Systems Engineer:** Huynh Huu Tri  
 > **Academic Year:** 2026  
 > **Core Technology Stack:** ESP32-CAM · FreeRTOS · Dual-Model YOLOv8 · Flask · OpenCV · Web Audio API · Python 3.13  
+> **Official PDF Report (Google Drive):** [Download / View PDF on Google Drive](https://drive.google.com/file/d/1O0312Y3JlM2RKBX1bc4fR-lGt-6NuERv/view?usp=sharing)  
+> **System Operational Video Demo:** [Watch on YouTube (https://youtu.be/n2op9aZQfCc)](https://youtu.be/n2op9aZQfCc)  
 
 ---
 
